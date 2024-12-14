@@ -19,14 +19,14 @@ unet.load_state_dict(torch.load(hf_hub_download(repo_name, ckpt_name), map_locat
 pipe = DiffusionPipeline.from_pretrained(base_model_id, unet=unet, torch_dtype=torch.float16, variant="fp16").to(device)
 pipe.scheduler = LCMScheduler.from_config(pipe.scheduler.config)
 
-def set_seed(seed):
+def set_seed(seed: int):
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
-def generate_image(jobs, seed=None):
+def generate_image(jobs: list[tuple[str, str, int]], seed=None):
     all_times = []
     for (prompt, scheduler, num_inference_steps) in jobs:
         if seed is not None:

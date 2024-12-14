@@ -14,14 +14,8 @@ jobs = list(itertools.product(
     [3, 4, 8, 15],
 ))
 
+seeds = [42, 69, 223, 241, 242, 323, 365, 420, 431, 432]
+
 if __name__ == "__main__":
-    generate_image(jobs, 42)
-    generate_image(jobs, 69)
-    generate_image(jobs, 223)
-    generate_image(jobs, 241)
-    generate_image(jobs, 242)
-    generate_image(jobs, 323)
-    generate_image(jobs, 365)
-    generate_image(jobs, 420)
-    generate_image(jobs, 431)
-    generate_image(jobs, 432)
+    for seed in seeds:
+        generate_image(jobs, seed)

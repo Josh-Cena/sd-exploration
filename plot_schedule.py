@@ -15,14 +15,18 @@ num_inference_steps = [
     15,
 ]
 
-fig, axs = plt.subplots(len(schedules), len(num_inference_steps), figsize=(15, 15))
+def plot_schedule(file_name: str):
+    fig, axs = plt.subplots(len(schedules), len(num_inference_steps), figsize=(15, 15))
 
-for schedule in schedules:
-    for num_inference_step in num_inference_steps:
-        step_range = create_timesteps(schedule, num_inference_step)
-        ax = axs[schedules.index(schedule), num_inference_steps.index(num_inference_step)]
-        ax.scatter(range(num_inference_step), step_range)
-        ax.set_title(f"{schedule}, {num_inference_step} steps")
+    for schedule in schedules:
+        for num_inference_step in num_inference_steps:
+            step_range = create_timesteps(schedule, num_inference_step)
+            ax = axs[schedules.index(schedule), num_inference_steps.index(num_inference_step)]
+            ax.scatter(range(num_inference_step), step_range)
+            ax.set_title(f"{schedule}, {num_inference_step} steps")
 
-fig.tight_layout()
-fig.savefig("schedule.png")
+    fig.tight_layout()
+    fig.savefig(file_name)
+
+if __name__ == "__main__":
+    plot_schedule("plots/schedule.png")
