@@ -8,9 +8,9 @@ import argparse
 
 # Work around CUDA memory limits.
 # Run this script with the following command:
-# for dir in output-*; do
+# for dir in output/*; do
 #   if [ -d "$dir" ]; then
-#     suffix=${dir#output-}
+#     suffix=${dir#output/}
 #     python clip_score.py --seed "$suffix"
 #   fi
 # done
@@ -25,7 +25,7 @@ similarities = []
 for (prompt, scheduler, num_inference_steps) in jobs:
     text_prompts = [prompt]
     prompt_abstract = re.sub("[^0-9a-zA-Z]+", "_", "_".join(prompt.split(" ")[:4]))
-    images = [Image.open(f"output-{args.seed}/{prompt_abstract}_{scheduler}_{num_inference_steps}.png")]
+    images = [Image.open(f"output/{args.seed}/{prompt_abstract}_{scheduler}_{num_inference_steps}.png")]
 
     image_features = torch.stack([preprocess(img).to(device) for img in images])
     image_features = model.encode_image(image_features)
@@ -38,4 +38,4 @@ for (prompt, scheduler, num_inference_steps) in jobs:
     similarities.append({ "prompt": prompt, "scheduler": scheduler, "num_inference_steps": num_inference_steps, "similarity": similarity })
     torch.cuda.empty_cache()
 
-pd.DataFrame(similarities).to_csv(f"output-{args.seed}/similarities.csv", index=False)
+pd.DataFrame(similarities).to_csv(f"output/{args.seed}/similarities.csv", index=False)

@@ -37,8 +37,8 @@ def generate_image(jobs, seed=None):
         end = time.perf_counter()
         all_times.append({ "prompt": prompt, "scheduler": scheduler, "num_inference_steps": num_inference_steps, "time": end - start })
         prompt_abstract = re.sub("[^0-9a-zA-Z]+", "_", "_".join(prompt.split(" ")[:4]))
-        image.save(f"output-{seed}/{prompt_abstract}_{scheduler}_{num_inference_steps}.png")
-    pd.DataFrame(all_times).to_csv(f"output-{seed}/times.csv", index=False)
+        image.save(f"output/{seed}/{prompt_abstract}_{scheduler}_{num_inference_steps}.png")
+    pd.DataFrame(all_times).to_csv(f"output/{seed}/times.csv", index=False)
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()

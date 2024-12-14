@@ -4,7 +4,7 @@ from PIL import Image
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-image_folder = "output/output-431"
+image_folder = "output/431"
 
 images_by_prompt = {}
 for filename in os.listdir(image_folder):
