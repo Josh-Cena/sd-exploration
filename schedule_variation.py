@@ -5,6 +5,8 @@ from safetensors.torch import load_file
 import argparse
 from create_timesteps import create_timesteps
 import re
+import time
+import pandas as pd
 
 device = "cuda"
 
@@ -25,13 +27,18 @@ def set_seed(seed):
     torch.backends.cudnn.benchmark = False
 
 def generate_image(jobs, seed=None):
+    all_times = []
     for (prompt, scheduler, num_inference_steps) in jobs:
         if seed is not None:
             set_seed(seed)
+        start = time.perf_counter()
         timesteps = create_timesteps(scheduler, num_inference_steps)
         image = pipe(prompt=prompt, num_inference_steps=num_inference_steps, guidance_scale=0, timesteps=timesteps).images[0]
+        end = time.perf_counter()
+        all_times.append({ "prompt": prompt, "scheduler": scheduler, "num_inference_steps": num_inference_steps, "time": end - start })
         prompt_abstract = re.sub("[^0-9a-zA-Z]+", "_", "_".join(prompt.split(" ")[:4]))
-        image.save(f"output/{prompt_abstract}_{scheduler}_{num_inference_steps}.png")
+        image.save(f"output-{seed}/{prompt_abstract}_{scheduler}_{num_inference_steps}.png")
+    pd.DataFrame(all_times).to_csv(f"output-{seed}/times.csv", index=False)
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()

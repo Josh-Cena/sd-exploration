@@ -24,4 +24,5 @@ for schedule in schedules:
         ax.scatter(range(num_inference_step), step_range)
         ax.set_title(f"{schedule}, {num_inference_step} steps")
 
+fig.tight_layout()
 fig.savefig("schedule.png")
